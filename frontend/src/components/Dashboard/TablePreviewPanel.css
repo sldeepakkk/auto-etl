@@ -1,0 +1,120 @@
+/* ── Overlay ──────────────────────────────────────────────────────────────── */
+.tpp-overlay {
+  position: fixed; inset: 0; z-index: 200;
+  background: rgba(0, 0, 0, 0.25);
+  display: flex; align-items: flex-start; justify-content: flex-end;
+}
+
+/* ── Slide-in panel ───────────────────────────────────────────────────────── */
+.tpp-panel {
+  width: min(720px, 90vw);
+  height: 100vh;
+  background: var(--surface);
+  border-left: 1px solid var(--border);
+  display: flex; flex-direction: column;
+  box-shadow: -8px 0 32px rgba(0, 0, 0, 0.10);
+  animation: tpp-slide-in .18s ease-out;
+}
+
+@keyframes tpp-slide-in {
+  from { transform: translateX(40px); opacity: 0; }
+  to   { transform: translateX(0);    opacity: 1; }
+}
+
+/* ── Header ───────────────────────────────────────────────────────────────── */
+.tpp-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.tpp-title {
+  display: flex; align-items: center; gap: 9px;
+  font-size: 14px; font-weight: 600; font-family: var(--font-mono);
+  color: var(--text);
+}
+.tpp-close {
+  width: 28px; height: 28px; display: flex; align-items: center;
+  justify-content: center; border-radius: 5px; color: var(--text-faint);
+  cursor: pointer; background: none; border: none; transition: .12s;
+}
+.tpp-close:hover { background: var(--surface2); color: var(--text); }
+
+/* ── States ───────────────────────────────────────────────────────────────── */
+.tpp-loading {
+  flex: 1; display: flex; align-items: center; justify-content: center;
+  gap: 10px; color: var(--text-faint); font-size: 13px;
+}
+.tpp-spin { animation: spin 1s linear infinite; }
+@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+.tpp-error {
+  margin: 20px; padding: 12px 14px;
+  background: var(--rust-faint); border: 1px solid rgba(192,68,56,.2);
+  border-radius: 6px; font-size: 12px; color: var(--rust);
+}
+.tpp-empty { padding: 20px; font-size: 12.5px; color: var(--text-faint); }
+
+/* ── Body ─────────────────────────────────────────────────────────────────── */
+.tpp-body { flex: 1; overflow-y: auto; padding: 20px; }
+
+.tpp-section-label {
+  font-size: 10px; font-weight: 600; color: var(--text-faint);
+  text-transform: uppercase; letter-spacing: .06em; margin-bottom: 10px;
+}
+
+/* ── Scrollable table wrappers ────────────────────────────────────────────── */
+.tpp-schema-wrap,
+.tpp-data-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+}
+
+/* ── Shared table styles ──────────────────────────────────────────────────── */
+.tpp-table {
+  width: 100%; border-collapse: collapse;
+  font-family: var(--font-mono); font-size: 11.5px; white-space: nowrap;
+}
+.tpp-table th {
+  text-align: left; padding: 8px 12px;
+  background: var(--surface2);
+  border-bottom: 1px solid var(--border);
+  font-size: 10px; font-weight: 600; color: var(--text-faint);
+  text-transform: uppercase; letter-spacing: .04em;
+  position: sticky; top: 0;
+}
+.tpp-table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-dim); font-size: 11.5px;
+  max-width: 260px; overflow: hidden; text-overflow: ellipsis;
+}
+.tpp-table tr:last-child td { border-bottom: none; }
+.tpp-table tr:hover td { background: var(--surface2); }
+
+.tpp-col-name { color: var(--text); font-weight: 500; }
+
+/* ── Type badges ──────────────────────────────────────────────────────────── */
+.tpp-type-badge {
+  display: inline-block; padding: 2px 7px; border-radius: 4px;
+  font-size: 10px; background: var(--surface2);
+  border: 1px solid var(--border); color: var(--text-dim);
+}
+.tpp-type-badge.mysql {
+  background: rgba(184,115,51,.08);
+  border-color: rgba(184,115,51,.25);
+  color: var(--amber-dim);
+}
+.tpp-cast-badge {
+  display: inline-block; padding: 2px 6px; border-radius: 4px;
+  font-size: 9.5px; background: rgba(192,68,56,.1);
+  border: 1px solid rgba(192,68,56,.2); color: var(--rust);
+  font-weight: 600;
+}
+.tpp-bool { font-size: 11px; }
+.tpp-bool.yes { color: var(--sage); }
+.tpp-bool.no  { color: var(--text-faint); }
+
+/* ── Null values ──────────────────────────────────────────────────────────── */
+.tpp-null { color: var(--text-faint); font-style: italic; }

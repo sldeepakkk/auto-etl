@@ -1,0 +1,165 @@
+/* ── Canvas area ────────────────────────────────────────────────────────── */
+.canvas-area {
+  flex: 1; position: relative; overflow: hidden;
+  background-color: #F4F5F7;
+  background-image: radial-gradient(circle, #D0D3D8 1px, transparent 1px);
+  background-size: 22px 22px;
+  user-select: none;
+}
+
+/* Transform wrapper — all canvas content lives here */
+.canvas-transform {
+  position: absolute;
+  left: 0; top: 0;
+  will-change: transform;
+}
+
+/* ── SVG edges ───────────────────────────────────────────────────────────── */
+.canvas-svg path {
+  stroke: #C0C4CC; stroke-width: 1.5; fill: none; transition: stroke .15s;
+}
+.canvas-svg path.edge-active { stroke: var(--amber); stroke-width: 2; }
+.canvas-svg path.edge-table  { stroke: #C0C4CC; stroke-width:1; stroke-dasharray:4 3; }
+
+/* ── Hint + zoom controls ────────────────────────────────────────────────── */
+.canvas-hint {
+  position: absolute; bottom: 14px; left: 50%; transform: translateX(-50%);
+  font-size: 10.5px; color: var(--text-faint); pointer-events: none;
+  background: var(--surface); border: 1px solid var(--border);
+  padding: 4px 12px; border-radius: 20px; white-space: nowrap;
+}
+.canvas-zoom-controls {
+  position: absolute; bottom: 14px; right: 16px;
+  display: flex; align-items: center; gap: 3px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 8px; padding: 3px 5px;
+  box-shadow: 0 1px 6px rgba(0,0,0,.07);
+}
+.zoom-btn {
+  width: 26px; height: 26px; border-radius: 5px; border: none;
+  background: none; color: var(--text-dim); cursor: pointer;
+  display: flex; align-items: center; justify-content: center; transition: .12s;
+}
+.zoom-btn:hover { background: var(--surface2); color: var(--text); }
+.zoom-label {
+  font-size: 11px; font-family: var(--font-mono); color: var(--text-dim);
+  min-width: 36px; text-align: center;
+}
+.zoom-reset { border-left: 1px solid var(--border); margin-left: 2px; padding-left: 2px; }
+
+/* ── Pipeline nodes ──────────────────────────────────────────────────────── */
+.canvas-node {
+  position: absolute; width: 36px; height: 36px;
+  cursor: grab; z-index: 2; user-select: none;
+}
+.canvas-node:active { cursor: grabbing; }
+
+.canvas-node-icon {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: #FFFFFF;
+  border: 1.5px solid #AEB3BB;
+  display: flex; align-items: center; justify-content: center;
+  color: #3A3D42;
+  transition: border-color .13s, background .13s, box-shadow .13s;
+  position: relative;
+  box-shadow: 0 1px 4px rgba(0,0,0,.08);
+}
+.canvas-node:hover .canvas-node-icon { border-color: var(--amber-dim); background: #FAF5F0; }
+.canvas-node.selected .canvas-node-icon {
+  border-color: var(--amber); border-width: 2px; color: var(--amber);
+  background: rgba(184,115,51,.1);
+  box-shadow: 0 0 0 4px rgba(184,115,51,.10), 0 1px 4px rgba(0,0,0,.08);
+}
+.node-sig {
+  font-family: var(--font-mono); font-size: 15px; font-weight: 700; color: inherit;
+}
+
+/* Lock + approval badges */
+.canvas-node-lock {
+  position: absolute; bottom:-2px; right:-2px;
+  width:13px; height:13px; border-radius:50%;
+  background:#EDEEF0; border:1px solid #C4C8D0;
+  display:flex; align-items:center; justify-content:center;
+  color:#8C9099; pointer-events:none;
+}
+.canvas-node-badge {
+  position: absolute; top:-4px; right:-4px;
+  width:16px; height:16px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  pointer-events:none; border:1.5px solid #fff;
+}
+.canvas-node-badge.approved { background:#4A8C6A; color:#fff; }
+.canvas-node-badge.blocked  { background:#C04438; color:#fff; }
+
+/* Label pill */
+.canvas-node-label {
+  position: absolute; top: 42px; left: 18px; transform: translateX(-50%);
+  font-size: 10.5px; color: var(--text-dim);
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 4px; padding: 2px 7px; white-space: nowrap; pointer-events: none;
+  box-shadow: 0 1px 3px rgba(0,0,0,.05);
+}
+.canvas-node.selected .canvas-node-label {
+  color: #6B4520; border-color: rgba(184,115,51,.4); background: #FDF8F3;
+}
+
+/* Hover tooltip */
+.canvas-node-tooltip {
+  position: absolute; top: 52px; left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 8px; padding: 10px 13px;
+  opacity: 0; pointer-events: none;
+  transition: opacity .14s, transform .14s;
+  z-index: 50; box-shadow: 0 6px 20px rgba(0,0,0,.09);
+  min-width: 200px; max-width: 280px;
+}
+.canvas-node:hover .canvas-node-tooltip { opacity:1; transform:translateX(-50%) translateY(0); }
+.tooltip-type {
+  font-size: 9.5px; font-weight:600; color:var(--text-faint);
+  text-transform:uppercase; letter-spacing:.06em; margin-bottom:5px;
+}
+.tooltip-desc { font-size:11.5px; color:var(--text-dim); line-height:1.55; margin-bottom:6px; white-space:normal; }
+.tooltip-cte  {
+  font-size:10px; font-family:var(--font-mono); color:var(--amber-dim);
+  background:var(--amber-faint); padding:2px 7px; border-radius:4px; display:inline-block; margin-bottom:6px;
+}
+.tooltip-hint { font-size:9.5px; color:var(--text-faint); border-top:1px solid var(--border); padding-top:6px; margin-top:2px; }
+
+/* ── Table satellites ────────────────────────────────────────────────────── */
+.table-satellite {
+  position: absolute;
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+  pointer-events: none; z-index: 1;
+}
+.table-satellite-icon {
+  width:22px; height:22px; border-radius:50%;
+  background:#EDEEF0; border:1px solid #C4C8D0;
+  display:flex; align-items:center; justify-content:center; color:#72757A;
+}
+.table-satellite-label {
+  font-size:9px; font-family:var(--font-mono); color:#72757A;
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:3px; padding:1px 5px; white-space:nowrap;
+  max-width:120px; overflow:hidden; text-overflow:ellipsis;
+}
+
+/* ── DQ check status badge — bottom-left, independent of approval badge ── */
+.canvas-node-dq-badge {
+  position: absolute; bottom: -4px; left: -4px;
+  width: 16px; height: 16px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  pointer-events: none; border: 1.5px solid #fff;
+}
+.canvas-node-dq-badge.dq-error { background: #C04438; color: #fff; }
+.canvas-node-dq-badge.dq-warn  { background: #B87333; color: #fff; }
+.canvas-node-dq-badge.dq-pass  { background: #4A8C6A; color: #fff; }
+
+/* ── DQ status line inside the hover tooltip ── */
+.tooltip-dq-status {
+  font-size: 10.5px; padding: 5px 8px; border-radius: 5px;
+  margin-bottom: 6px; line-height: 1.4;
+}
+.tooltip-dq-error { background: rgba(192,68,56,.1); color: #C04438; }
+.tooltip-dq-warn  { background: rgba(184,115,51,.1); color: #B87333; }
+.tooltip-dq-pass  { background: rgba(74,140,106,.1); color: #4A8C6A; }

@@ -1,0 +1,21 @@
+:root {
+  --bg:         #F4F5F7;
+  --surface:    #FFFFFF;
+  --surface2:   #F0F2F5;
+  --surface3:   #E8EAED;
+  --border:     #DDE0E5;
+  --border2:    #C8CCD3;
+  --text:       #1A1C20;
+  --text-dim:   #52565C;
+  --text-faint: #8C9099;
+  --amber:      #B87333;
+  --amber-dim:  #9A5E28;
+  --amber-faint:rgba(184,115,51,0.09);
+  --sage:       #4A8C6A;
+  --sage-faint: rgba(74,140,106,0.10);
+  --rust:       #C04438;
+  --rust-faint: rgba(192,68,56,0.10);
+  --radius:     7px;
+  --font-ui:    'IBM Plex Sans',-apple-system,sans-serif;
+  --font-mono:  'IBM Plex Mono',ui-monospace,monospace;
+}
